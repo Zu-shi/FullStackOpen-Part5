@@ -11,7 +11,7 @@ const Toggleable = (props) => {
       <div style={showWhenVisible}>
         {props.children}
       </div >
-      <button onClick={() => setVisible(!visible)}>{visible ? props.hideButtonText : props.showButtonText}</button>
+      <button id={props.buttonName} onClick={() => setVisible(!visible)}>{visible ? props.hideButtonText : props.showButtonText}</button>
     </div>
   )
   /*

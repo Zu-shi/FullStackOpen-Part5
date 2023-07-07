@@ -134,7 +134,7 @@ const App = () => {
         <div>
           {user.username} is logged in <> </>
           <button onClick={onSubmitLogout}>Logout</button>
-          <Toggleable showButtonText={'Show Blog Submit Form'} hideButtonText={'Hide Blog Submit Form'}>
+          <Toggleable showButtonText={'Show Blog Submit Form'} hideButtonText={'Hide Blog Submit Form'} buttonName={'blogSubmitFormButton'}>
             <BlogForm onSubmitBlog={onSubmitBlog} />
           </Toggleable>
         </div> :

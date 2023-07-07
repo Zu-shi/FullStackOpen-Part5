@@ -34,4 +34,22 @@ describe('Note app', function () {
       cy.get('button').eq(0).should('contain', 'login')
     })
   })
+
+  describe('When logged in', function () {
+    beforeEach(function () {
+      cy.get('input').first().type('mluukkai')
+      cy.get('input').eq(1).type('salainen')
+      cy.get('button').click()
+      cy.contains('is logged in')
+    })
+
+    it.only('can submit new blog entires', function () {
+      cy.get('#blogSubmitFormButton').click()
+      cy.get('input').eq(0).type('title text')
+      cy.get('input').eq(1).type('author text')
+      cy.get('input').eq(2).type('url text')
+      cy.contains('button', 'save').click()
+      cy.contains('title text')
+    })
+  })
 })
