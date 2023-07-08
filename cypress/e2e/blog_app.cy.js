@@ -2,7 +2,7 @@
 
 
 describe('Note app', function () {
-  beforeEach('Remove users', () => {
+  beforeEach('Reset users', () => {
     cy.request('POST', 'http://localhost:3003/api/testing/reset')
     const user = {
       name: 'Matti Luukkainen',
@@ -10,6 +10,13 @@ describe('Note app', function () {
       password: 'salainen'
     }
     cy.request('POST', 'http://localhost:3003/api/users/', user)
+
+    const user2 = {
+      name: 'zushi',
+      username: 'zms',
+      password: 'password'
+    }
+    cy.request('POST', 'http://localhost:3003/api/users/', user2)
     cy.visit('http://localhost:3000')
   })
 
@@ -43,6 +50,12 @@ describe('Note app', function () {
       cy.contains('is logged in')
     })
 
+    it.only('can log out', function () {
+      cy.get('body').should('contain', 'is logged in')
+      cy.contains('button', 'Logout').click()
+      cy.get('body').should('not.contain', 'is logged in')
+    })
+
     it('can submit new blog entires', function () {
       cy.get('#blogSubmitFormButton').click()
       cy.get('input').eq(0).type('title text')
@@ -54,17 +67,6 @@ describe('Note app', function () {
 
     describe('When a new blog exists', function () {
       beforeEach(function () {
-
-        // cy.intercept('POST', '*', (req) => {
-        //   // Access the request body
-        //   const requestBody = req.body
-        //   // Log the request body to the Cypress command log
-        //   cy.log(JSON.stringify(requestBody))
-        // }).as('yourRequestAlias')
-        // // Make the request that you want to inspect
-        // // ...
-        // // Wait for the request to complete
-
         cy.intercept({
           method: 'POST',
           url: '*'
@@ -90,7 +92,7 @@ describe('Note app', function () {
         cy.contains('likes: 1')
       })
 
-      it.only('can delete the blog', function () {
+      it('can delete the blog', function () {
         cy.contains('title text')
         cy.contains('button', 'Delete').click()
         cy.get('body').should('not.contain', 'title text')
