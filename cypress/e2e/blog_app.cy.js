@@ -1,7 +1,7 @@
 /// <reference types="Cypress" />
 
-describe('Note app', function () {
 
+describe('Note app', function () {
   beforeEach('Remove users', () => {
     cy.request('POST', 'http://localhost:3003/api/testing/reset')
     const user = {
@@ -43,13 +43,52 @@ describe('Note app', function () {
       cy.contains('is logged in')
     })
 
-    it.only('can submit new blog entires', function () {
+    it('can submit new blog entires', function () {
       cy.get('#blogSubmitFormButton').click()
       cy.get('input').eq(0).type('title text')
       cy.get('input').eq(1).type('author text')
       cy.get('input').eq(2).type('url text')
       cy.contains('button', 'save').click()
       cy.contains('title text')
+    })
+
+    describe('When a new blog exists', function () {
+      beforeEach(function () {
+
+        // cy.intercept('POST', '*', (req) => {
+        //   // Access the request body
+        //   const requestBody = req.body
+        //   // Log the request body to the Cypress command log
+        //   cy.log(JSON.stringify(requestBody))
+        // }).as('yourRequestAlias')
+        // // Make the request that you want to inspect
+        // // ...
+        // // Wait for the request to complete
+
+        cy.intercept({
+          method: 'POST',
+          url: '*'
+        }).as('posts')
+
+        cy.get('#blogSubmitFormButton').click()
+        cy.get('input').eq(0).type('title text')
+        cy.get('input').eq(1).type('author text')
+        cy.get('input').eq(2).type('url text')
+        cy.contains('button', 'save').click()
+
+        cy.wait('@posts').then(xhr => {
+          cy.log(xhr.responseBody)
+          cy.log(xhr.requestBody)
+          //expect(xhr.method).to.eq('POST')
+        })
+
+        cy.contains('title text')
+      })
+
+      it.only('can submit new likes', function () {
+        cy.contains('button', 'Like').click()
+        cy.contains('likes: 1')
+      })
     })
   })
 })

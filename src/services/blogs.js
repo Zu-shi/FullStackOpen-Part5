@@ -3,7 +3,11 @@ const baseUrl = '/api/blogs'
 
 const getAll = () => {
   const request = axios.get(baseUrl)
-  return request.then(response => response.data)
+  return request.then(response => {
+    console.log('getall')
+    console.log(response)
+    return response.data
+  })
 }
 
 const postBlog = async ({ user, blogTitle, author, url }) => {
