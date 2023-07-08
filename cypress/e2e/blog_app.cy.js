@@ -85,9 +85,15 @@ describe('Note app', function () {
         cy.contains('title text')
       })
 
-      it.only('can submit new likes', function () {
+      it('can submit new likes', function () {
         cy.contains('button', 'Like').click()
         cy.contains('likes: 1')
+      })
+
+      it.only('can delete the blog', function () {
+        cy.contains('title text')
+        cy.contains('button', 'Delete').click()
+        cy.get('body').should('not.contain', 'title text')
       })
     })
   })
