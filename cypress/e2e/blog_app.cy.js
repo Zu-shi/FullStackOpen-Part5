@@ -151,8 +151,13 @@ describe('Note app', function () {
       cy.postArticle('title4', 'author4', 'url4')
     })
 
-    it.only('only one delete button for new user', function () {
+    it('only one delete button for new user', function () {
       cy.get('button:contains("Delete")').should('have.length', 1)
+    })
+
+    it.only('Highest like items appear first', function () {
+      cy.get('div:contains("likes:")').eq(0).contains('1')
+      cy.get('div:contains("likes:")').eq(1).contains('0')
     })
   })
 })

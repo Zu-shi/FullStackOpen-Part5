@@ -1,12 +1,12 @@
 import axios from 'axios'
 const baseUrl = '/api/blogs'
 
-const getAll = () => {
+const getAllByLikesOrder = () => {
   const request = axios.get(baseUrl)
   return request.then(response => {
-    console.log('getall')
+    console.log('getAllByLikesOrder')
     console.log(response)
-    return response.data
+    return response.data.sort((a, b) => b.likes - a.likes)
   })
 }
 
@@ -60,4 +60,4 @@ const deleteBlog = async ({ user, blog }) => {
   return response
 }
 
-export default { getAll, postBlog, likeBlog, deleteBlog }
+export default { getAllByLikesOrder, postBlog, likeBlog, deleteBlog }

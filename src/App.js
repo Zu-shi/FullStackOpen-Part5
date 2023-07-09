@@ -27,7 +27,7 @@ const App = () => {
       // don't need to check response status, error go directly below.
       console.log('succeeded like')
       console.log(response.data)
-      blogService.getAll().then(blogs =>
+      blogService.getAllByLikesOrder().then(blogs =>
         setBlogs(blogs)
       )
     }).catch(error => {
@@ -49,7 +49,7 @@ const App = () => {
       // don't need to check response status, error go directly below.
       console.log('succeeded like')
       console.log(response.data)
-      blogService.getAll().then(blogs =>
+      blogService.getAllByLikesOrder().then(blogs =>
         setBlogs(blogs)
       )
     }).catch(error => {
@@ -88,7 +88,7 @@ const App = () => {
     blogService.postBlog({ user, blogTitle, author, url }).then(() => {
       // don't need to check response status, error go directly below.
       // To optimize later, does not need to make a roundtrip to server.
-      blogService.getAll().then(blogs =>
+      blogService.getAllByLikesOrder().then(blogs =>
         setBlogs(blogs)
       )
     }).catch(error => {
@@ -122,7 +122,7 @@ const App = () => {
   }
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
+    blogService.getAllByLikesOrder().then(blogs =>
       setBlogs(blogs)
     )
   }, [])
