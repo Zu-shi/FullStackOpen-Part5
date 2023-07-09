@@ -118,6 +118,7 @@ const App = () => {
   const onSubmitLogout = function () {
     loginService.logout()
     setUser(null)
+    setBlogs([])
   }
 
   useEffect(() => {
@@ -143,7 +144,7 @@ const App = () => {
 
       <h2>blogs</h2>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} onLikeArticle={onLikeArticle} onDeleteArticle={onDeleteArticle} />
+        <Blog key={blog.id} blog={blog} onLikeArticle={onLikeArticle} onDeleteArticle={onDeleteArticle} user={user.id} />
       )}
     </div>
   )

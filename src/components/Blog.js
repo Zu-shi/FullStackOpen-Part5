@@ -8,13 +8,27 @@ const LikeButton = ({ blog }) => {
 }
 */
 
-const Blog = ({ blog, onLikeArticle, onDeleteArticle }) => {
+const Blog = ({ user, blog, onLikeArticle, onDeleteArticle }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
     border: 'solid',
     borderWidth: 1,
     marginBottom: 5
+  }
+
+  let isUser = blog.user === user
+  console.log('---')
+  console.log(blog)
+  console.log(user)
+  console.log(blog.user === user)
+
+  const renderDeleteButton = () => {
+    if (isUser) {
+      return <button onClick={(event) => { onDeleteArticle(event, blog) }}>Delete</button>
+    } else {
+      return
+    }
   }
 
   return (
@@ -29,8 +43,8 @@ const Blog = ({ blog, onLikeArticle, onDeleteArticle }) => {
           author: {blog.author}
         </div>
       </Toggleable>
-      <button onClick={(event) => { onDeleteArticle(event, blog) }}>Delete</button>
-    </div >)
+      {renderDeleteButton()}
+    </div>)
 }
 
 export default Blog

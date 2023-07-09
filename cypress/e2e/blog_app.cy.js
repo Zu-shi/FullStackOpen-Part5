@@ -152,7 +152,7 @@ describe('Note app', function () {
     })
 
     it.only('only one delete button for new user', function () {
-      cy.get('button', 'Delete').should('have.length', 1)
+      cy.get('button:contains("Delete")').should('have.length', 1)
     })
   })
 })
