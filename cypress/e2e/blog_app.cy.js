@@ -1,21 +1,57 @@
 /// <reference types="Cypress" />
 
+const user = {
+  name: 'Matti Luukkainen',
+  username: 'mluukkai',
+  password: 'salainen'
+}
+
+const user2 = {
+  name: 'zushi',
+  username: 'zms',
+  password: 'password'
+}
+
+Cypress.Commands.add('Login', (user) => {
+  cy.get('input').first().type(user.username)
+  cy.get('input').eq(1).type(user.password)
+  cy.get('button:contains("login")').click()
+})
+
+Cypress.Commands.add('postArticle', (title, author, url) => {
+  cy.get('body').then(body => {
+
+    // cy.get('#blogSubmitFormButton').then(($el) => {
+    //   if ($el.length) {
+    //     // Element exists, do something
+    //     $el[0].click()
+    //   }
+    // })
+    // // cy.wait(3000)
+    // if (body.find('button:contains("Show Blog Submit")').length > 0) {
+    //   cy.get('button').contains('logout').click()
+    // }
+    // if (body.find('#blogSubmitFormButton').length > 0) {
+    //   cy.get('#blogSubmitFormButton').click()
+    // }
+
+    cy.get('#blogSubmitFormButton').click()
+    cy.get('input').eq(0).type(title)
+    cy.get('input').eq(1).type(author)
+    cy.get('input').eq(2).type(url)
+    cy.contains('button', 'save').click()
+    cy.contains(title)
+    cy.get('input').eq(0).clear()
+    cy.get('input').eq(1).clear()
+    cy.get('input').eq(2).clear()
+    cy.get('#blogSubmitFormButton').click()
+  })
+})
 
 describe('Note app', function () {
   beforeEach('Reset users', () => {
     cy.request('POST', 'http://localhost:3003/api/testing/reset')
-    const user = {
-      name: 'Matti Luukkainen',
-      username: 'mluukkai',
-      password: 'salainen'
-    }
     cy.request('POST', 'http://localhost:3003/api/users/', user)
-
-    const user2 = {
-      name: 'zushi',
-      username: 'zms',
-      password: 'password'
-    }
     cy.request('POST', 'http://localhost:3003/api/users/', user2)
     cy.visit('http://localhost:3000')
   })
@@ -50,7 +86,7 @@ describe('Note app', function () {
       cy.contains('is logged in')
     })
 
-    it.only('can log out', function () {
+    it('can log out', function () {
       cy.get('body').should('contain', 'is logged in')
       cy.contains('button', 'Logout').click()
       cy.get('body').should('not.contain', 'is logged in')
@@ -97,6 +133,26 @@ describe('Note app', function () {
         cy.contains('button', 'Delete').click()
         cy.get('body').should('not.contain', 'title text')
       })
+    })
+  })
+
+  describe('When you have three blog entries by two authors', function () {
+    beforeEach(function () {
+      cy.Login(user)
+      cy.postArticle('title1', 'author1', 'url1')
+      cy.postArticle('title2', 'author2', 'url2')
+      // cy.get('input').first().type('mluukkai')
+      // cy.get('input').eq(1).type('salainen')
+      cy.get('button:contains("Like")').eq(1).click()
+      // cy.get('button', 'Like')[1].click()
+      cy.postArticle('title3', 'author3', 'url3')
+      cy.contains('button', 'Logout').click()
+      cy.Login(user2)
+      cy.postArticle('title4', 'author4', 'url4')
+    })
+
+    it.only('only one delete button for new user', function () {
+      cy.get('button', 'Delete').should('have.length', 1)
     })
   })
 })
